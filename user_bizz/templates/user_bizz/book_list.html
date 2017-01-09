@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+{% load staticfiles %}
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'polls/main.css' %}" />
+</head>
+<body> 		
+	<div class="container">
+		<div class="col-md-12">
+			<center>
+			<h1>User List</h1>
+			<table class="table-1">
+				<th>
+					<td class="td-th" style="width:15%">Name</td>
+					<td class="td-th" style="width:15%">Birthday</td>
+					<td class="td-th" style="width:15%">Eligible</td>
+					<td class="td-th" style="width:15%">RandNum</td>
+					<td class="td-th" style="width:15%">BizzFuzz</td>
+					<td class="td-th" style="width:12.5%">Edit</td>
+					<td class="td-th" style="width:12.5%">Delete</td>
+				</th>
+				{% for book in object_list %}
+				<tr>
+					<td style="width:15%"></td>
+					<td style="width:15%">{{ book.name }}</td>
+					<td style="width:15%">{{ book.birthday}}</td>
+					<td style="width:15%">
+					{% if book.birthday.year < 2004 %}
+						{% with patient as p %}
+						allowed
+						{% endwith %}
+					{% else %}
+						{% with patient.parent as p %}
+						blocked
+						{% endwith %}
+					{% endif %}
+					</td>
+					<td style="width:15%">{{ book.randNum }}</td>
+					<td style="width:15%">
+					{% if book.bizz == 0 %}
+						BizzFuzz
+					{% elif book.bizz == 1 %}
+						Bizz
+					{% elif book.bizz == 2 %}
+						Fuzz
+					{% else %}
+						{{ book.randNum }}
+					{% endif %}
+					</td>
+					<td style="width:12.5%"><a href="{% url 'user_bizz:book_edit' book.id %}">edit</a></td>
+					<td style="width:12.5%"><a href="{% url 'user_bizz:book_delete' book.id %}">delete</a></td>
+				</tr>
+			    {% endfor %}
+			</table>
+			<div class="row new-btn">
+				<a href="{% url 'user_bizz:book_new' %}" class="newBtn">New</a>
+			</div>
+			<div class="row excel-export">
+				<a href="{% url 'user_bizz:export_users_csv' %}">Export all users</a>
+			</div>			
+			</center>
+		</div>
+	</div>
+</body>
+</html>
